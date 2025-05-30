@@ -21,16 +21,16 @@ class CameraController:
             print("Camera is not opened.")
             return None
 
-    def start_timed_capture(self, duration=10):
+    def start_timed_capture(self):
         self.running = True
-        self.capture_thread = threading.Thread(target=self._timed_capture, args=(duration,))
+        self.capture_thread = threading.Thread(target=self._timed_capture)
         self.capture_thread.start()
 
-    def _timed_capture(self, duration):
-        start_time = time.time()
+    def _timed_capture(self):
+        interval = 0.2  # Capture every 200 milliseconds
         elapsed_time = 0
-        interval = 0.2 # Capture every 200 milliseconds
-        while self.running and (time.time() - start_time < duration):
+        start_time = time.time()
+        while self.running:
             frame = self.capture_frame()
             if frame is not None:
                 # Process the frame (e.g., save it, display it, etc.)
@@ -38,7 +38,7 @@ class CameraController:
             time.sleep(interval)
             elapsed_time = time.time() - start_time
             if elapsed_time > 1:
-                interval = 0.5 # Adjust interval after 1 second to capture less frequently
+                interval = 0.5  # Adjust interval after 1 second to capture less frequently
 
     def stop_timed_capture(self):
         self.running = False
