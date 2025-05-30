@@ -59,8 +59,11 @@ class Gui:
         print(f"Selected camera: {selected_camera}")
 
     def on_start(self):
-        self.camera_controller = CameraController(self.camera_manager)
-        self.camera_controller.start_timed_capture()
+        if self.folder:
+            self.camera_controller = CameraController(self.camera_manager)
+            self.camera_controller.start_timed_capture(self.folder)
+        else:
+            print("Please select a folder first.") # put message box here
 
     def on_stop(self):
         if hasattr(self, 'camera_controller'):

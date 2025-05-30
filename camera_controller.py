@@ -1,3 +1,5 @@
+import os
+
 import cv2
 import time
 import threading
@@ -21,12 +23,12 @@ class CameraController:
             print("Camera is not opened.")
             return None
 
-    def start_timed_capture(self):
+    def start_timed_capture(self, folder):
         self.running = True
-        self.capture_thread = threading.Thread(target=self._timed_capture)
+        self.capture_thread = threading.Thread(target=self._timed_capture, args=(folder,))
         self.capture_thread.start()
 
-    def _timed_capture(self):
+    def _timed_capture(self, folder):
         interval = 0.2  # Capture every 200 milliseconds
         elapsed_time = 0
         start_time = time.time()
@@ -34,6 +36,7 @@ class CameraController:
             frame = self.capture_frame()
             if frame is not None:
                 # Process the frame (e.g., save it, display it, etc.)
+                self.process_file(folder, frame)
                 print("Frame captured at", time.time())
             time.sleep(interval)
             elapsed_time = time.time() - start_time
@@ -44,5 +47,13 @@ class CameraController:
         self.running = False
         if self.capture_thread:
             self.capture_thread.join()
+
+    def process_file(self, folder, frame):
+        timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+        ms = int((time.time() % 1) * 1000)
+        filename = f"{timestamp}_{ms:03d}.jpg"
+        filepath = os.path.join(folder, filename)
+        cv2.imwrite(filepath, frame)
+        print(f"Saved: {filepath}")
 
 
