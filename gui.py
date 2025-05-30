@@ -2,6 +2,9 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
 from tkinter.ttk import Style
+from PIL import Image, ImageTk
+
+from camera_controller import CameraController
 from camera_manager import CameraManager
 
 
@@ -18,6 +21,9 @@ class Gui:
 
         self.frame = Frame(self.window, bg="black", bd=5, relief=SUNKEN)
         self.frame.pack()
+
+        #self.image_label = Label(self.frame, text="Image output", bd=5, relief=SUNKEN, bg="white", fg="black")
+        #self.image_label.pack(padx=10, pady=10)
 
         self.select_folder_button = Button(self.frame, text="Select Folder", font=("Consolas", 25), width=15, command=self.select_folder)
         self.select_folder_button.pack(padx=10, pady=10)
@@ -53,10 +59,12 @@ class Gui:
         print(f"Selected camera: {selected_camera}")
 
     def on_start(self):
-        pass
+        self.camera_controller = CameraController(self.camera_manager)
+        self.camera_controller.start_timed_capture()
 
     def on_stop(self):
-        pass
+        if hasattr(self, 'camera_controller'):
+            self.camera_controller.stop_timed_capture()
 
 # To run the GUI
 if __name__ == "__main__":
