@@ -44,6 +44,7 @@ class Gui:
 
         self.stop_button = Button(self.frame, text="Stop", font=("Consolas", 25), width=15, command=self.on_stop)
         self.stop_button.pack(padx=10, pady=10)
+        self.stop_button.config(state=DISABLED)
 
         self.window.mainloop()
 
@@ -60,14 +61,20 @@ class Gui:
 
     def on_start(self):
         if self.folder:
+            self.start_button.config(state=DISABLED)
+            self.stop_button.config(state=NORMAL)
             self.camera_controller = CameraController(self.camera_manager)
             self.camera_controller.start_timed_capture(self.folder)
         else:
             print("Please select a folder first.") # put message box here
+            self.start_button.config(state=NORMAL)
+            self.stop_button.config(state=DISABLED)
 
     def on_stop(self):
         if hasattr(self, 'camera_controller'):
             self.camera_controller.stop_timed_capture()
+            self.stop_button.config(state=DISABLED)
+            self.start_button.config(state=NORMAL)
 
 # To run the GUI
 if __name__ == "__main__":
