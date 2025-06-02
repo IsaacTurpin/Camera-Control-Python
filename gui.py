@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, colorchooser
 from tkinter import ttk
 from tkinter.ttk import Style
 from PIL import Image, ImageTk
@@ -18,10 +18,9 @@ class Gui:
         self.window.iconphoto(False, icon)
 
         style = Style(self.window)
-        style.configure('Custom.TMenubutton', font=('Consolas', 15), foreground='black')
+        style.configure('Custom.TMenubutton', font=('Consolas', 20), foreground='black')
 
         self.folder = None
-        self.camera = None
 
         self.frame = Frame(self.window, bg="black", bd=5, relief=SUNKEN)
         self.frame.pack()
@@ -29,17 +28,19 @@ class Gui:
         #self.image_label = Label(self.frame, text="Image output", bd=5, relief=SUNKEN, bg="white", fg="black")
         #self.image_label.pack(padx=10, pady=10)
 
-        self.select_folder_button = Button(self.frame, text="Select Folder", font=("Consolas", 25), width=15, command=self.select_folder)
+        self.select_folder_button = Button(self.frame, text="Select Folder", font=("Consolas", 25), width=15,
+                                           command=self.select_folder)
         self.select_folder_button.pack(padx=10, pady=10)
 
-        self.dropdown_label = Label(self.frame, text="Select Camera", font=("Consolas", 25), fg="white", bg="black")
-        self.dropdown_label.pack()
+        #self.dropdown_label = Label(self.frame, text="Select Camera", font=("Consolas", 25), fg="white", bg=self.frame['bg'])
+        #self.dropdown_label.pack()
 
         camera_options = self.camera_manager.available_cameras
         default_text = "Select Camera"
         self.camera_var = StringVar(value=default_text)
         self.camera_dropdown = ttk.OptionMenu(
-            self.frame, self.camera_var, default_text, *camera_options, command=self.on_camera_selected, style='Custom.TMenubutton'
+            self.frame, self.camera_var, default_text, *camera_options, command=self.on_camera_selected,
+            style='Custom.TMenubutton'
         )
         self.camera_dropdown.pack(padx=10, pady=10)
 
@@ -50,7 +51,13 @@ class Gui:
         self.stop_button.pack(padx=10, pady=10)
         self.stop_button.config(state=DISABLED)
 
+        customise_button = Button(self.frame, text='Customise', font=("Consolas", 10), command=self.change_colour)
+        customise_button.pack()
+
         self.window.mainloop()
+
+    def change_colour(self):
+        self.frame.config(bg=colorchooser.askcolor()[1])
 
     def select_folder(self):
         self.folder = filedialog.askdirectory(initialdir="C:\\", title="Select Folder")
@@ -65,10 +72,14 @@ class Gui:
 
     def on_start(self):
         if self.folder:
-            self.start_button.config(state=DISABLED)
-            self.stop_button.config(state=NORMAL)
-            self.camera_controller = CameraController(self.camera_manager)
-            self.camera_controller.start_timed_capture(self.folder)
+            if self.camera_manager.get_camera():
+                self.start_button.config(state=DISABLED)
+                self.stop_button.config(state=NORMAL)
+                self.camera_controller = CameraController(self.camera_manager)
+                self.camera_controller.start_timed_capture(self.folder)
+            else:
+                messagebox.showinfo("No Camera Selected", "Please select a camera to start capturing images.")
+                print("Please select a camera first.")
         else:
             messagebox.showinfo("No Folder Selected", "Please select a folder to save the images.")
             print("Please select a folder first.") # put message box here
