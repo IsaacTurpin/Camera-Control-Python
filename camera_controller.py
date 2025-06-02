@@ -36,7 +36,6 @@ class CameraController:
         while self.running:
             frame = self.capture_frame()
             if frame is not None:
-                # Process the frame (e.g., save it, display it, etc.)
                 self.process_file(folder, frame)
                 print("Frame captured at", time.time())
 
