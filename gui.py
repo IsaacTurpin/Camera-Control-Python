@@ -14,6 +14,9 @@ class Gui:
         self.window.title("Camera Capture")
         self.camera_manager = CameraManager()
 
+        icon = PhotoImage(file="Images//camera-icon.png")
+        self.window.iconphoto(False, icon)
+
         style = Style(self.window)
         style.configure('Custom.TMenubutton', font=('Consolas', 15), foreground='black')
 
