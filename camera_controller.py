@@ -29,7 +29,7 @@ class CameraController:
         self.capture_thread.start()
 
     def _timed_capture(self, folder):
-        thresholds = [(5, 0.5), (3, 0.3), (2, 0.2), (1, 0.1), (0, 0.1)]  # (elapsed_time, interval)
+        thresholds = [(6, 0.5), (5, 0.3), (1, 0.1), (0, 0.1)]  # (elapsed_time, interval)
         interval = 0.1  # Capture every 100 milliseconds
         elapsed_time = 0
         start_time = time.time()

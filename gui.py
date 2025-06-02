@@ -73,12 +73,12 @@ class Gui:
     def start_countdown(self, seconds):
         if seconds > 0:
             self.countdown_label.config(text=f"Countdown: {seconds} seconds")
-            self.window.after(1000, self.start_countdown, seconds - 1)
+            self.window.after(1000, self.start_countdown, seconds - 1) # Countdown every second
         else:
             self.countdown_label.config(text="Starting capture!", fg="light green")
             self.camera_controller = CameraController(self.camera_manager)
             self.camera_controller.start_timed_capture(self.folder)
-            self.window.after(1000, lambda: self.countdown_label.config(text="", fg="yellow"))
+            self.window.after(1000, lambda: self.countdown_label.config(text="", fg="yellow")) # Reset countdown label after capture starts
 
     def change_colour(self):
         new_colour = colorchooser.askcolor()[1]
