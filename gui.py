@@ -78,12 +78,13 @@ class Gui:
             self.countdown_label.config(text="Starting capture!", fg="light green")
             self.camera_controller = CameraController(self.camera_manager)
             self.camera_controller.start_timed_capture(self.folder)
-            self.window.after(1000, lambda: self.countdown_label.config(text=""))
+            self.window.after(1000, lambda: self.countdown_label.config(text="", fg="yellow"))
 
     def change_colour(self):
         new_colour = colorchooser.askcolor()[1]
         self.frame.config(bg=new_colour)
         self.delay_label.config(bg=new_colour)
+        self.countdown_label.config(bg=new_colour)
 
     def select_folder(self):
         self.folder = filedialog.askdirectory(initialdir="C:\\", title="Select Folder")
