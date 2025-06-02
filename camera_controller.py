@@ -48,6 +48,7 @@ class CameraController:
                 interval = 0.3
             if elapsed_time > 5:
                 interval = 0.5
+            print('\033[91m' + str(interval) + '\033[0m')
 
     def stop_timed_capture(self):
         self.running = False
@@ -55,9 +56,10 @@ class CameraController:
             self.capture_thread.join()
 
     def process_file(self, folder, frame):
-        timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+        now = time.localtime()
         ms = int((time.time() % 1) * 1000)
-        filename = f"{timestamp}_{ms:03d}.jpg"
+        filename = (f"{now.tm_hour:02d}h{now.tm_min:02d}m{now.tm_sec:02d}s{ms:02d}ms "
+                    f"{now.tm_mday:02d}{now.tm_mon:02d}{now.tm_year}.jpg")
         filepath = os.path.join(folder, filename)
         cv2.imwrite(filepath, frame)
         print(f"Saved: {filepath}")
