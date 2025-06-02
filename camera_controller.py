@@ -29,6 +29,7 @@ class CameraController:
         self.capture_thread.start()
 
     def _timed_capture(self, folder):
+        thresholds = [(5, 0.5), (3, 0.3), (2, 0.2), (1, 0.1), (0, 0.1)]  # (elapsed_time, interval)
         interval = 0.1  # Capture every 100 milliseconds
         elapsed_time = 0
         start_time = time.time()
@@ -38,16 +39,15 @@ class CameraController:
                 # Process the frame (e.g., save it, display it, etc.)
                 self.process_file(folder, frame)
                 print("Frame captured at", time.time())
+
             time.sleep(interval)
             elapsed_time = time.time() - start_time
-            if elapsed_time > 1:
-                interval = 0.1
-            if elapsed_time > 2:
-                interval = 0.2
-            if elapsed_time > 3:
-                interval = 0.3
-            if elapsed_time > 5:
-                interval = 0.5
+
+            for threshold, new_interval in thresholds:
+                if elapsed_time > threshold:
+                    interval = new_interval
+                    break
+
             print('\033[91m' + str(interval) + '\033[0m')
 
     def stop_timed_capture(self):
