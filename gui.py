@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter import ttk
 from tkinter.ttk import Style
 from PIL import Image, ImageTk
@@ -11,6 +11,7 @@ from camera_manager import CameraManager
 class Gui:
     def __init__(self):
         self.window = Tk()
+        self.window.title("Camera Capture")
         self.camera_manager = CameraManager()
 
         style = Style(self.window)
@@ -66,6 +67,7 @@ class Gui:
             self.camera_controller = CameraController(self.camera_manager)
             self.camera_controller.start_timed_capture(self.folder)
         else:
+            messagebox.showinfo("No Folder Selected", "Please select a folder to save the images.")
             print("Please select a folder first.") # put message box here
             self.start_button.config(state=NORMAL)
             self.stop_button.config(state=DISABLED)
