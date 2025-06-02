@@ -21,6 +21,7 @@ class Gui:
         style.configure('Custom.TMenubutton', font=('Consolas', 20), foreground='black')
 
         self.folder = None
+        self.delay_var = IntVar(value=5) # Default delay of 5 seconds
 
         self.frame = Frame(self.window, bg="black", bd=5, relief=SUNKEN)
         self.frame.pack()
@@ -44,6 +45,16 @@ class Gui:
         )
         self.camera_dropdown.pack(padx=10, pady=10)
 
+        # add time delay label input
+        # add time delay countdown label
+
+        self.delay_label = Label(self.frame, text="Time Delay (seconds):", font=("Consolas", 20), bg=self.frame['bg'], fg="white")
+        self.delay_label.pack(padx=10, pady=10)
+
+        self.delay_spinbox = Spinbox(self.frame, from_=0, to=60, textvariable=self.delay_var, font=("Consolas", 20), width=5)
+        self.delay_spinbox.pack(padx=10, pady=10)
+
+
         self.start_button = Button(self.frame, text="Start", font=("Consolas", 25), width=15, command=self.on_start)
         self.start_button.pack(padx=10, pady=10)
 
@@ -57,7 +68,9 @@ class Gui:
         self.window.mainloop()
 
     def change_colour(self):
-        self.frame.config(bg=colorchooser.askcolor()[1])
+        new_colour = colorchooser.askcolor()[1]
+        self.frame.config(bg=new_colour)
+        self.delay_label.config(bg=new_colour)
 
     def select_folder(self):
         self.folder = filedialog.askdirectory(initialdir="C:\\", title="Select Folder")
