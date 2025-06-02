@@ -54,6 +54,9 @@ class Gui:
         self.delay_spinbox = Spinbox(self.frame, from_=0, to=60, textvariable=self.delay_var, font=("Consolas", 20), width=5)
         self.delay_spinbox.pack(padx=10, pady=10)
 
+        self.countdown_label = Label(self.frame, text="", font=("Consolas", 20), bg=self.frame["bg"], fg="yellow")
+        self.countdown_label.pack(padx=10, pady=10)
+
 
         self.start_button = Button(self.frame, text="Start", font=("Consolas", 25), width=15, command=self.on_start)
         self.start_button.pack(padx=10, pady=10)
@@ -66,6 +69,16 @@ class Gui:
         customise_button.pack()
 
         self.window.mainloop()
+
+    def start_countdown(self, seconds):
+        if seconds > 0:
+            self.countdown_label.config(text=f"Countdown: {seconds} seconds")
+            self.window.after(1000, self.start_countdown, seconds - 1)
+        else:
+            self.countdown_label.config(text="Starting capture!", fg="light green")
+            self.camera_controller = CameraController(self.camera_manager)
+            self.camera_controller.start_timed_capture(self.folder)
+            self.window.after(1000, lambda: self.countdown_label.config(text=""))
 
     def change_colour(self):
         new_colour = colorchooser.askcolor()[1]
@@ -88,8 +101,8 @@ class Gui:
             if self.camera_manager.get_camera():
                 self.start_button.config(state=DISABLED)
                 self.stop_button.config(state=NORMAL)
-                self.camera_controller = CameraController(self.camera_manager)
-                self.camera_controller.start_timed_capture(self.folder)
+                delay = self.delay_var.get()
+                self.start_countdown(delay)
             else:
                 messagebox.showinfo("No Camera Selected", "Please select a camera to start capturing images.")
                 print("Please select a camera first.")
