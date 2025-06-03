@@ -11,7 +11,6 @@ class CameraManager:
         for i in range(max_cameras):
             cap = cv2.VideoCapture(i)
             if cap.isOpened():
-                print(f"Camera {i} detected.")
                 cameras.append(i)
                 cap.release()
         return cameras

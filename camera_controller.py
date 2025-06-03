@@ -37,7 +37,6 @@ class CameraController:
             frame = self.capture_frame()
             if frame is not None:
                 self.process_file(folder, frame)
-                print("Frame captured at", time.time())
 
             time.sleep(interval)
             elapsed_time = time.time() - start_time
@@ -46,8 +45,6 @@ class CameraController:
                 if elapsed_time > threshold:
                     interval = new_interval
                     break
-
-            print('\033[91m' + str(interval) + '\033[0m')
 
     def stop_timed_capture(self):
         self.running = False
@@ -61,6 +58,5 @@ class CameraController:
                     f"{now.tm_mday:02d}{now.tm_mon:02d}{now.tm_year}.jpg")
         filepath = os.path.join(folder, filename)
         cv2.imwrite(filepath, frame)
-        print(f"Saved: {filepath}")
 
 

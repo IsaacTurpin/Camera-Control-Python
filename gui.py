@@ -52,10 +52,8 @@ class Gui:
                 self.start_countdown(delay)
             else:
                 messagebox.showinfo("No Camera Selected", "Please select a camera to start capturing images.")
-                print("Please select a camera first.")
         else:
             messagebox.showinfo("No Folder Selected", "Please select a folder to save the images.")
-            print("Please select a folder first.") # put message box here
             self.start_button.config(state=NORMAL)
             self.stop_button.config(state=DISABLED)
 
