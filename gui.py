@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import filedialog, messagebox, colorchooser
 from tkinter import ttk
 from tkinter.ttk import Style
-from PIL import Image, ImageTk
 
 from camera_controller import CameraController
 from camera_manager import CameraManager
